@@ -42,7 +42,6 @@ export default function StudyMode() {
   const [volume, setVolume] = useState(50);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Carregar configurações do localStorage
@@ -71,33 +70,13 @@ export default function StudyMode() {
 
   // Inicializar áudio
   useEffect(() => {
-    try {
-      audioRef.current = new Audio('/notification.mp3');
-      audioRef.current.volume = volume / 100;
-      
-      // Verificar se o arquivo existe
-      audioRef.current.addEventListener('error', () => {
-        console.warn('Arquivo de som de notificação não encontrado. O som está desativado.');
-        setSoundEnabled(false);
-      });
-    } catch (error) {
-      console.error('Erro ao inicializar áudio:', error);
-      setSoundEnabled(false);
-    }
-    
+    // Não tentar carregar arquivo externo, usar apenas o gerador de som
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     };
   }, []);
-
-  // Atualizar volume quando alterado
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume]);
 
   // Atualizar o timer quando o modo mudar
   useEffect(() => {
@@ -123,21 +102,8 @@ export default function StudyMode() {
 
   // Criar um som de notificação usando Web Audio API
   const playNotificationSound = () => {
-    try {
-      if (!soundEnabled) return;
-      
-      if (audioRef.current) {
-        // Tentar tocar o arquivo de som primeiro
-        audioRef.current.play().catch(e => {
-          console.warn('Usando som gerado como alternativa:', e);
-          generateBeepSound();
-        });
-      } else {
-        generateBeepSound();
-      }
-    } catch (error) {
-      console.error('Erro ao tocar som de notificação:', error);
-    }
+    if (!soundEnabled) return;
+    generateBeepSound();
   };
   
   // Gerar um som de beep usando Web Audio API
