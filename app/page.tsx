@@ -128,6 +128,21 @@ export default function Home() {
       return
     }
 
+    // Limpar dados antigos do localStorage que possam conter estruturas incompatíveis
+    try {
+      // Verificar se já limpamos os dados (usando uma flag)
+      const dataCleanupDone = localStorage.getItem('data-cleanup-v1')
+      if (!dataCleanupDone) {
+        console.log('Limpando dados antigos do localStorage...')
+        localStorage.removeItem('favorites')
+        localStorage.removeItem('recently-viewed')
+        // Marcar que a limpeza foi feita
+        localStorage.setItem('data-cleanup-v1', 'true')
+      }
+    } catch (error) {
+      console.error('Erro ao limpar dados antigos:', error)
+    }
+
     // Resto do código de inicialização...
     const init = async () => {
       setIsLoading(true)
@@ -169,66 +184,77 @@ export default function Home() {
       title: "Gerenciamento de Pacientes",
       description: "Cadastre e gerencie fichas de pacientes, histórico clínico e evolução.",
       icon: <Users className="h-8 w-8 text-blue-800" />,
+      iconName: "Users",
       href: "/pacientes",
     },
     {
       title: "Escalas de Avaliação",
       description: "Acesse e aplique escalas de avaliação fisioterapêutica padronizadas.",
       icon: <FileText className="h-8 w-8 text-blue-800" />,
+      iconName: "FileText",
       href: "/escalas",
     },
     {
       title: "Testes Funcionais",
       description: "Realize testes funcionais e acompanhe a evolução dos pacientes.",
       icon: <Stethoscope className="h-8 w-8 text-blue-800" />,
+      iconName: "Stethoscope",
       href: "/testes",
     },
     {
       title: "Calculadora Clínica",
       description: "Calcule índices e parâmetros clínicos importantes para a fisioterapia.",
       icon: <Database className="h-8 w-8 text-blue-800" />,
+      iconName: "Database",
       href: "/calculadora",
     },
     {
       title: "Protocolos por Especialidade",
       description: "Consulte protocolos de tratamento baseados em evidências científicas.",
       icon: <BookOpen className="h-8 w-8 text-blue-800" />,
+      iconName: "BookOpen",
       href: "/protocolos",
     },
     {
       title: "Body Chart Interativo",
       description: "Mapeie áreas de dor e sintomas em um diagrama corporal interativo.",
       icon: <Activity className="h-8 w-8 text-blue-800" />,
+      iconName: "Activity",
       href: "/body-chart",
     },
     {
       title: "Glossário Técnico",
       description: "Consulte termos técnicos e definições da fisioterapia.",
       icon: <BookOpen className="h-8 w-8 text-blue-800" />,
+      iconName: "BookOpen",
       href: "/glossario",
     },
     {
       title: "Links Úteis",
       description: "Acesse links para recursos externos relevantes para a fisioterapia.",
       icon: <Link2 className="h-8 w-8 text-blue-800" />,
+      iconName: "Link2",
       href: "/links",
     },
     {
       title: "Diário Acadêmico",
       description: "Registre e organize suas anotações de estudo e aprendizado.",
       icon: <BookOpen className="h-8 w-8 text-blue-800" />,
+      iconName: "BookOpen",
       href: "/diario",
     },
     {
       title: "Modelos de Documentos",
       description: "Acesse e crie modelos de documentos para sua prática clínica.",
       icon: <FileText className="h-8 w-8 text-blue-800" />,
+      iconName: "FileText",
       href: "/modelos",
     },
     {
       title: "Evolução Clínica",
       description: "Registre e acompanhe a evolução clínica dos seus pacientes.",
       icon: <TrendingUp className="h-8 w-8 text-blue-800" />,
+      iconName: "TrendingUp",
       href: "/evolucao",
     },
   ]
@@ -307,6 +333,7 @@ export default function Home() {
             title={module.title}
             description={module.description}
             icon={module.icon}
+            iconName={module.iconName}
             href={module.href}
             delay={index}
           />

@@ -10,11 +10,36 @@ interface AnimatedCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
+  iconName: string;
   href: string;
   delay: number;
 }
 
-export default function AnimatedCard({ title, description, icon, href, delay }: AnimatedCardProps) {
+// Função para identificar o nome do ícone (uma estimativa baseada no tipo de ícone)
+const getIconName = (icon: React.ReactNode): string => {
+  if (!icon || typeof icon !== 'object') return 'BookOpen';
+  
+  try {
+    // Tenta identificar o nome do componente a partir do tipo
+    const iconType = (icon as any).type;
+    if (iconType && iconType.displayName) {
+      return iconType.displayName;
+    }
+    
+    // Tenta identificar pelo nome da função (para componentes funcionais)
+    if (iconType && iconType.name) {
+      return iconType.name;
+    }
+    
+    // Se não conseguir identificar, retorna um padrão
+    return 'BookOpen';
+  } catch (error) {
+    console.error('Erro ao identificar ícone:', error);
+    return 'BookOpen';
+  }
+};
+
+export default function AnimatedCard({ title, description, icon, iconName, href, delay }: AnimatedCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   
@@ -86,7 +111,8 @@ export default function AnimatedCard({ title, description, icon, href, delay }: 
     e.preventDefault();
     e.stopPropagation();
     
-    const module = { title, description, icon, href };
+    // Usar o nome do ícone em vez do componente React
+    const module = { title, description, iconName, href };
     
     try {
       const storedFavorites = localStorage.getItem('favorites');
@@ -109,7 +135,8 @@ export default function AnimatedCard({ title, description, icon, href, delay }: 
   
   // Registrar acesso ao módulo quando clicar no link
   const handleCardClick = () => {
-    const module = { title, description, icon, href };
+    // Usar o nome do ícone em vez do componente React
+    const module = { title, description, iconName, href };
     FavoritesContext.registerModuleAccess(module);
   };
   

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { Star, Clock } from 'lucide-react';
+import { Star, Clock, Activity, BookOpen, Database, FileText, Link2, Stethoscope, TrendingUp, Users } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -9,9 +9,24 @@ import { motion } from 'framer-motion';
 interface Module {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  iconName: string; // Nome do ícone em vez do componente React
   href: string;
 }
+
+// Função para obter o ícone com base no nome
+const getIconByName = (iconName: string) => {
+  switch (iconName) {
+    case 'Users': return <Users className="h-5 w-5 text-blue-800" />;
+    case 'FileText': return <FileText className="h-5 w-5 text-blue-800" />;
+    case 'Stethoscope': return <Stethoscope className="h-5 w-5 text-blue-800" />;
+    case 'Database': return <Database className="h-5 w-5 text-blue-800" />;
+    case 'BookOpen': return <BookOpen className="h-5 w-5 text-blue-800" />;
+    case 'Activity': return <Activity className="h-5 w-5 text-blue-800" />;
+    case 'Link2': return <Link2 className="h-5 w-5 text-blue-800" />;
+    case 'TrendingUp': return <TrendingUp className="h-5 w-5 text-blue-800" />;
+    default: return <BookOpen className="h-5 w-5 text-blue-800" />;
+  }
+};
 
 export default function FavoritesSystem() {
   const [favorites, setFavorites] = useState<Module[]>([]);
@@ -98,7 +113,7 @@ export default function FavoritesSystem() {
                 className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 flex items-center gap-2 hover:shadow-md transition-shadow"
               >
                 <div className="bg-blue-50 dark:bg-blue-900/30 rounded-full p-2 flex-shrink-0">
-                  {module.icon}
+                  {getIconByName(module.iconName)}
                 </div>
                 <div className="flex-grow">
                   <Link href={module.href} className="text-blue-800 dark:text-blue-300 font-medium">
@@ -134,7 +149,7 @@ export default function FavoritesSystem() {
                 className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 flex items-center gap-2 hover:shadow-md transition-shadow"
               >
                 <div className="bg-blue-50 dark:bg-blue-900/30 rounded-full p-2 flex-shrink-0">
-                  {module.icon}
+                  {getIconByName(module.iconName)}
                 </div>
                 <div className="flex-grow">
                   <Link href={module.href} className="text-blue-800 dark:text-blue-300 font-medium">
